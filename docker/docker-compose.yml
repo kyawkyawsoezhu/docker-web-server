@@ -1,0 +1,25 @@
+version: "2"
+
+services:
+    site:
+        build: ./Dockerfile/site/
+        container_name: site
+        volumes: 
+            - ./union_data:/union_data
+            - ../www:/var/www/html
+            - ./config/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+        ports:
+            - 8180:80
+        links:
+            - site_mysql
+
+    site_mysql:
+        image: mysql:5.7
+        container_name: site_mysql
+        volumes: 
+            - ./union_data:/union_data
+            - ./mysql:/var/lib/mysql
+        ports:
+            - 3106:3306
+        environment:
+          MYSQL_ROOT_PASSWORD: root
